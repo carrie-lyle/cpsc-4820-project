@@ -15,9 +15,7 @@ def load_data(data):
 
 def run_eda_app():
     st.subheader("EDA Section")
-    #df = load_data("data/combined_hotspots.csv")
     sample_df = load_data("data/sampled_hotspots.csv")
-    #freq_df = load_data("data/freqdist_of_age_data.csv")
 
     submenu = st.sidebar.selectbox("SubMenu", ["Descriptive", "Plots"])
     if submenu == "Descriptive":
@@ -31,9 +29,6 @@ def run_eda_app():
 
         with st.expander("Intensity Distribution"):
             st.dataframe(sample_df['Intensity'].value_counts())
-
-        #with st.expander("Class Distribution"):
-         #   st.dataframe(df_clean['class'].value_counts())
 
 #Guneet, please do the plots
 """    else:
