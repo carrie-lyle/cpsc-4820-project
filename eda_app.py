@@ -64,8 +64,6 @@ def run_eda_app():
                 st.write("The following pairs of features have high correlations:")
             for i, j in high_corr_pairs:
                 st.write(f"{i} and {j} with correlation {corr_matrix.loc[i, j]:.2f}")
-            else:
-                st.write("No pairs with correlation greater than 0.9 found.")
 
 #Guneet, please do the plots
 """    else:
