@@ -16,19 +16,56 @@ def load_data(data):
 def run_eda_app():
     st.subheader("EDA Section")
     sample_df = load_data("data/sampled_hotspots.csv")
+    clean_df = load_data("data/cleaned_hotspots.csv")
 
-    submenu = st.sidebar.selectbox("SubMenu", ["Descriptive", "Plots"])
-    if submenu == "Descriptive":
+    submenu = st.sidebar.selectbox("SubMenu", ["Preprocessing","Descriptive", "Plots"])
+    if submenu == "Preprocessing":
         st.dataframe(sample_df)
 
-        with st.expander("Data Types Summary"):
+        with st.expander("Data Overview"):
+            st.dataframe(sample_df.shape)
+            st.dataframe(sample_df.columns)
             st.dataframe(sample_df.dtypes)
+            st.dataframe(sample_df.head())
+        
+        with st.expander("Missing Values"):
+            null_values = sample_df.isnull().sum()
+            columns_with_nulls = null_values[null_values > 0]
+            st.write("Columns with null values:")
+            st.dataframe(columns_with_nulls)
+
+    if submenu == "Descriptive":
+        st.dataframe(clean_df)
+
+        with st.expander("Data Types Summary"):
+            st.dataframe(clean_df.dtypes)
 
         with st.expander("Descriptive Summary"):
-            st.dataframe(sample_df.describe())
+            columns_to_describe = [
+                'temp', 'rh', 'ws', 'wd', 'pcp', 'ffmc', 'dmc', 'dc', 
+                'isi', 'bui', 'fwi', 'ros', 'sfc', 'tfc', 'hfi', 
+                'cfb', 'elev', 'sfl', 'cfl'
+            ]
+
+        with st.expander("Descriptive Summary"):
+            st.dataframe(clean_df[columns_to_describe].describe())
 
         with st.expander("Intensity Distribution"):
-            st.dataframe(sample_df['Intensity'].value_counts())
+            st.dataframe(clean_df['Intensity'].value_counts())
+
+        corr_matrix = clean_df[columns_to_describe].corr()
+
+        high_corr_pairs = [(i, j) for i in corr_matrix.columns for j in corr_matrix.columns 
+                   if i != j and abs(corr_matrix.loc[i, j]) > 0.9]
+        
+        with st.expander("Highly Correlated Pairs"):
+            st.write("Highly correlated pairs are those where the absolute value of the correlation coefficient is greater than 0.9.")
+            if high_corr_pairs:
+                st.write("The following pairs of features have high correlations:")
+            for i, j in high_corr_pairs:
+                st.write(f"{i} and {j} with correlation {corr_matrix.loc[i, j]:.2f}")
+            else:
+                st.write("No pairs with correlation greater than 0.9 found.")
 
 #Guneet, please do the plots
 """    else:
