@@ -40,9 +40,6 @@ if menu_id == 'Home':
 elif menu_id == 'EDA':
     st.subheader("EDA")
     run_eda_app()
-elif menu_id == 'Visualizations':
-    st.subheader("Visualizations")
-    run_eda_app()
 elif menu_id == 'Machine Learning':
     st.subheader("Machine Learning Section")
     run_ml_app()
